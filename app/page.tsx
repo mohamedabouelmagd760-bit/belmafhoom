@@ -26,7 +26,7 @@ export default async function Home(){
  <header className="site-header"><div className="site-header-inner wrap">
   <Link href="/" className="brand brand-lockup" aria-label="بالمفهوم الرئيسية"><img src="/logo.svg" alt="بالمفهوم BELMAFHOOM — مش مجرد شرح.. فهم حقيقي" /></Link>
   <nav className="main-nav" aria-label="القائمة الرئيسية"><Link className="nav-active" href="/">الرئيسية</Link><Link href="/courses">الكورسات</Link><Link href="/teachers">المدرسون</Link><Link href="/about">عن المنصة</Link><Link href="/help">الأسئلة والمساعدة</Link></nav>
-  <div className="header-actions"><Link className="header-login" href="/login">تسجيل الدخول</Link><Link className="btn btn-primary header-cta" href="/signup">ابدأ الآن <span>←</span></Link></div>
+  <div className="header-actions"><Link className="header-login" href="/login">تسجيل الدخول</Link><Link className="btn btn-primary header-cta" href="/signup">ابدأ الآن <span>←</span></Link></div><details className="mobile-menu"><summary aria-label="فتح القائمة"><span/><span/><span/></summary><div className="mobile-menu-panel"><Link href="/">الرئيسية</Link><Link href="/courses">الكورسات</Link><Link href="/teachers">المدرسون</Link><Link href="/about">عن المنصة</Link><Link href="/help">الأسئلة والمساعدة</Link><Link href="/login">تسجيل الدخول</Link><Link href="/signup">إنشاء حساب</Link></div></details>
  </div></header>
  <main className="landing-v3">
   <section className="hero-v3"><div className="hero-v3-pattern pattern-a"/><div className="hero-v3-pattern pattern-b"/>
@@ -34,7 +34,7 @@ export default async function Home(){
     <div className="hero-v3-copy"><span className="hero-v3-kicker"><i/> منصة تعليمية.. بفكرة مختلفة</span>
      <h1>اتعلم بالطريقة<br/>اللي <em>تفهمك.</em></h1>
      <p>اكتشف مدرسين متميزين، واختار الكورسات المناسبة ليك. تعلّم منظم يساعدك تفهم المعلومة وتوصل لهدفك بثقة.</p>
-     <div className="hero-v3-actions"><Link className="btn btn-primary btn-v3-main" href="/courses">اكتشف الكورسات <span>←</span></Link><Link className="btn btn-v3-outline" href="/teachers">تعرّف على المدرسين <span>↗</span></Link></div>
+     <div className="hero-v3-actions"><Link className="btn btn-primary btn-v3-main" href="/courses">اكتشف الكورسات <span>←</span></Link><Link className="btn btn-v3-outline" href="/teachers">تعرّف على المدرسين <span>↗</span></Link></div><form action="/courses" method="get" className="hero-search-v3"><span>⌕</span><input name="q" type="search" placeholder="ابحث عن كورس أو مادة..." aria-label="ابحث عن كورس أو مادة"/><button type="submit">بحث <b>←</b></button></form>
      <div className="hero-v3-points"><span><b>✓</b> محتوى تعليمي منظم</span><span><b>✓</b> مدرسون معتمدون</span><span><b>✓</b> متابعة مستمرة</span></div>
     </div>
     <div className="hero-v3-art">
