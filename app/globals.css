@@ -68,3 +68,20 @@ body{font-family:"IBM Plex Sans Arabic",sans-serif;background:#fff;color:var(--i
 .footer-logo img{display:block;width:190px!important;height:auto!important;object-fit:contain!important}
 @media(max-width:900px){.brand-lockup{width:190px!important;min-width:190px!important}.brand-lockup img{width:184px!important}}
 @media(max-width:700px){.site-header{height:76px!important}.site-header-inner{width:calc(100% - 24px)!important;gap:8px!important}.brand-lockup{width:148px!important;min-width:148px!important}.brand-lockup img{width:145px!important;height:auto!important}.header-actions{gap:7px!important}}
+
+/* Mobile fixed bottom navigation */
+.mobile-bottom-nav{display:none}
+@media(max-width:700px){
+  body{padding-bottom:calc(70px + env(safe-area-inset-bottom))}
+  .mobile-bottom-nav{
+    position:fixed;z-index:100;inset:auto 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+    min-height:64px;padding:7px 8px calc(7px + env(safe-area-inset-bottom));
+    background:rgba(255,255,255,.97);border-top:1px solid #e8edf5;
+    box-shadow:0 -8px 28px rgba(23,43,77,.09);backdrop-filter:blur(14px);
+  }
+  .mobile-bottom-nav-link{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    min-width:0;color:#8491a4;text-decoration:none;font:600 9px Alexandria,sans-serif;transition:color .18s ease}
+  .mobile-bottom-nav-link svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .mobile-bottom-nav-link.is-active{color:#356CE6}
+  .mobile-bottom-nav-link.is-active svg{stroke-width:2.2}
+}
