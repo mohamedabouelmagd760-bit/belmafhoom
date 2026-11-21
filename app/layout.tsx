@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "بالمفهوم | مش مجرد شرح.. فهم حقيقي",
   description: "منصة تعليمية تجمع الطلاب بالمدرسين والكورسات المنظمة.",
   applicationName: "بالمفهوم",
+  icons: { icon: "/icon.svg", shortcut: "/icon.svg", apple: "/icon.svg" },
   manifest: "/manifest.webmanifest",
   themeColor: "#172B4D"
 };
