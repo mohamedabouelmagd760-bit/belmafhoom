@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import MobileBottomNav from "@/components/mobile-bottom-nav";
 
 export const metadata: Metadata = {
   title: "بالمفهوم | مش مجرد شرح.. فهم حقيقي",
@@ -11,5 +12,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="ar" dir="rtl"><body>{children}</body></html>;
+  return <html lang="ar" dir="rtl"><body>{children}<MobileBottomNav /></body></html>;
 }
