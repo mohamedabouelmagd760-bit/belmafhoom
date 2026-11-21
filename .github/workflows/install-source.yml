@@ -1,0 +1,97 @@
+name: Install BELMAFHOOM source archive
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "source.zip"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: install-belmafhoom-source
+  cancel-in-progress: false
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: true
+
+      - name: Safely extract source archive
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path, PurePosixPath
+          from zipfile import ZipFile
+          import shutil
+
+          archive = Path("source.zip")
+          destination = Path(".").resolve()
+          staging = Path("/tmp/belmafhoom-source").resolve()
+          if not archive.is_file():
+              raise SystemExit("source.zip was not found")
+          if staging.exists():
+              shutil.rmtree(staging)
+          staging.mkdir(parents=True)
+
+          with ZipFile(archive) as z:
+              entries = z.infolist()
+              if len(entries) > 2000:
+                  raise SystemExit("Archive contains too many entries")
+              for info in entries:
+                  name = info.filename.replace("\\", "/")
+                  p = PurePosixPath(name)
+                  if p.is_absolute() or ".." in p.parts:
+                      raise SystemExit(f"Unsafe archive path: {name}")
+                  mode = (info.external_attr >> 16) & 0o170000
+                  if mode == 0o120000:
+                      raise SystemExit(f"Symlinks are not allowed: {name}")
+                  target = (staging / Path(*p.parts)).resolve()
+                  if staging not in target.parents and target != staging:
+                      raise SystemExit(f"Unsafe archive path: {name}")
+                  if info.is_dir():
+                      target.mkdir(parents=True, exist_ok=True)
+                  else:
+                      target.parent.mkdir(parents=True, exist_ok=True)
+                      with z.open(info) as src, target.open("wb") as dst:
+                          shutil.copyfileobj(src, dst)
+
+          roots = list(staging.iterdir())
+          if len(roots) == 1 and roots[0].is_dir():
+              source_root = roots[0]
+          else:
+              source_root = staging
+          if not (source_root / "package.json").is_file() or not (source_root / "app").is_dir():
+              raise SystemExit("Archive is missing package.json or app/ at its root")
+
+          for item in source_root.iterdir():
+              target = destination / item.name
+              if item.is_dir():
+                  if target.exists():
+                      shutil.copytree(item, target, dirs_exist_ok=True)
+                  else:
+                      shutil.copytree(item, target)
+              else:
+                  shutil.copy2(item, target)
+
+          archive.unlink()
+          print("BELMAFHOOM source extracted successfully.")
+          PY
+
+      - name: Commit application source
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No source changes to commit."
+            exit 0
+          fi
+          git commit -m "Install BELMAFHOOM application source"
+          git push
