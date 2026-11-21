@@ -31,10 +31,13 @@ export default async function DashboardPage() {
     teacherReview = teacher?.review_status || "pending";
     courses = teacherCourses || [];
   } else if (profile.role === "student") {
-    const { data: studentEnrollments } = await supabase.from("course_enrollments").select("id,status,created_at,courses(id,title,description)").eq("student_id", user.id).order("created_at", { ascending: false }).limit(8);
+    const { data: studentEnrollments } = await supabase.from("course_enrollments").select("id,status,created_at,course_id,courses(id,title,description)").eq("student_id", user.id).order("created_at", { ascending: false }).limit(20);
     enrollments = studentEnrollments || [];
-    const { data: studentAssignments } = await supabase.from("assignments").select("id,title,due_at,max_points,courses(title)").eq("status", "published").order("due_at", { ascending: true }).limit(6);
-    assignments = studentAssignments || [];
+    const activeCourseIds = enrollments.filter((x:any) => x.status === "active").map((x:any) => x.course_id);
+    if (activeCourseIds.length) {
+      const { data: studentAssignments } = await supabase.from("assignments").select("id,title,due_at,max_points,courses(title)").in("course_id", activeCourseIds).eq("status", "published").order("due_at", { ascending: true }).limit(6);
+      assignments = studentAssignments || [];
+    }
   }
 
   async function signOut() {
@@ -69,6 +72,7 @@ export default async function DashboardPage() {
       <section className="section compact-section"><div className="section-head"><div><span className="eyebrow">إدارة المحتوى</span><h2>كورساتي</h2></div></div>{courses.length ? <div className="stack-list">{courses.map(course => <div className="list-row" key={course.id}><div><b>{course.title}</b><small>الحالة: {course.status === "published" ? "منشور" : course.status === "draft" ? "مسودة" : course.status}</small></div><Link className="btn btn-light" href={`/dashboard/courses/${course.id}/manage`}>إدارة الكورس</Link></div>)}</div> : <div className="empty-state small-empty"><p>لسه ما أنشأتش أي كورس.</p>{profile.account_status === "active" && <Link className="btn btn-primary" href="/dashboard/courses/new">ابدأ بأول كورس</Link>}</div>}</section>
       <section className="section compact-section"><div className="form-actions"><Link className="btn btn-light" href="/dashboard/assignments">الواجبات والتصحيح</Link><Link className="btn btn-light" href="/dashboard/exams">الامتحانات</Link><Link className="btn btn-light" href="/dashboard/subscription">اشتراك المنصة</Link></div></section>
     </>}
+    {profile.role === "student" && <section className="cards" style={{marginTop:24}}><article className="panel-card"><span className="eyebrow">اشتراكاتك</span><h2>{enrollments.filter((x:any)=>x.status==="active").length}</h2><p>كورسات مفعّلة</p></article><article className="panel-card"><span className="eyebrow">مهامك</span><h2>{assignments.length}</h2><p>واجبات منشورة في كورساتك</p></article><article className="panel-card"><span className="eyebrow">المتابعة</span><h2>{enrollments.filter((x:any)=>x.status==="pending").length}</h2><p>طلبات اشتراك قيد المراجعة</p></article></section>}
     {profile.role === "student" && <section className="section compact-section"><div className="section-head"><div><span className="eyebrow">رحلتك التعليمية</span><h2>كورساتي</h2></div><Link className="text-link" href="/courses">اكتشف كورسات ←</Link></div>{enrollments.length ? <div className="stack-list">{enrollments.map((item: any) => <div className="list-row" key={item.id}><div><b>{item.courses?.title || "كورس"}</b><small>حالة الاشتراك: {item.status === "active" ? "مفعل" : item.status === "pending" ? "قيد المراجعة" : item.status}</small></div><Link className="btn btn-light" href={`/learn/${item.courses?.id || ""}`}>فتح الكورس</Link></div>)}</div> : <div className="empty-state small-empty"><p>لسه مشتركش في أي كورس.</p><Link className="btn btn-primary" href="/courses">تصفح الكورسات</Link></div>}</section>}
     {profile.role === "guardian" && <section className="panel-card"><h2>حساب ولي الأمر</h2><p>تابع اشتراكات الأبناء بعد موافقتهم على الربط.</p><Link className="btn btn-primary" href="/dashboard/guardian">إدارة الأبناء</Link></section>}
     {profile.role === "admin" && <section className="panel-card"><h2>لوحة الإدارة</h2><p>مراجعة الاعتمادات والاشتراكات وإدارة الباقات.</p><Link className="btn btn-primary" href="/dashboard/admin">فتح لوحة الإدارة</Link></section>}
