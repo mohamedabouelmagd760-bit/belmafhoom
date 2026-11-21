@@ -1,20 +1,15 @@
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
-
-export const dynamic = "force-dynamic";
-
-type Course = { id: string; title: string; description: string | null; price: number; is_free: boolean; subjects?: { name: string } | null; grades?: { name: string } | null };
-
-export default async function CoursesPage() {
-  let courses: Course[] = [];
-  let errorMessage = "";
-  try {
-    const supabase = await createClient();
-    const { data, error } = await supabase.from("courses").select("id,title,description,price,is_free,subjects(name),grades(name)").eq("status", "published").order("published_at", { ascending: false });
-    if (error) errorMessage = "تعذر تحميل الكورسات حاليًا. حاول مرة تانية.";
-    else courses = (data || []) as unknown as Course[];
-  } catch { errorMessage = "إعدادات الاتصال بقاعدة البيانات غير مكتملة."; }
-  return <main className="page-shell wrap"><header className="dash-head"><Link className="brand" href="/"><span className="brand-mark">ب</span><span><b>بالمفهوم</b><small>BELMAFHOOM</small></span></Link><Link className="btn btn-primary" href="/dashboard">مساحتي التعليمية</Link></header><section className="page-intro"><span className="eyebrow">اتعلم بالمفهوم</span><h1>اكتشف الكورسات</h1><p>اختار الكورس المناسب لصفك والمادة اللي عايز تتقنها.</p></section>
-    {errorMessage ? <div className="notice error">{errorMessage}</div> : courses.length ? <div className="cards">{courses.map((course, i) => <article className="course-card" key={course.id}><div className={`course-art ${["blue","gold","violet"][i % 3]}`}>{course.subjects?.name || "بالمفهوم"}</div><div className="course-info"><span className="tag">{course.grades?.name || "كل الصفوف"}</span><h3>{course.title}</h3><p>{course.description || "تفاصيل الكورس ومحتواه التعليمي."}</p><div className="meta"><b>{course.is_free ? "مجاني" : `${Number(course.price).toLocaleString("ar-EG")} ج.م`}</b><Link href={`/courses/${course.id}`}>التفاصيل ←</Link></div></div></article>)}</div> : <div className="empty-state"><div className="empty-icon">✦</div><h3>مفيش كورسات منشورة حاليًا</h3><p>الكورسات هتظهر هنا بعد اعتماد المدرس ونشره للمحتوى.</p><Link className="btn btn-primary" href="/signup">انضم كمدرس</Link></div>}
-  </main>;
+import {createClient} from "@/lib/supabase/server";
+export const dynamic="force-dynamic";
+type Course={id:string;title:string;description:string|null;price:number;is_free:boolean;subjects?:{name:string}|null;grades?:{name:string}|null};
+export default async function CoursesPage({searchParams}:{searchParams:Promise<{q?:string;subject?:string;grade?:string;free?:string}>}){
+ const p=await searchParams;const q=(p.q||"").trim().slice(0,100);const subject=(p.subject||"").trim();const grade=(p.grade||"").trim();const free=p.free==="yes";
+ const s=await createClient();const [{data:subjects},{data:grades}]=await Promise.all([s.from("subjects").select("id,name").eq("is_active",true).order("sort_order"),s.from("grades").select("id,name").eq("is_active",true).order("sort_order")]);
+ let query=s.from("courses").select("id,title,description,price,is_free,subjects(name),grades(name)").eq("status","published").order("published_at",{ascending:false});
+ if(q)query=query.ilike("title",`%${q.replace(/[%_]/g,"")}%`);if(subject)query=query.eq("subject_id",subject);if(grade)query=query.eq("grade_id",grade);if(free)query=query.eq("is_free",true);
+ const {data,error}=await query;const courses=(data||[]) as unknown as Course[];
+ return <main className="page-shell wrap"><header className="dash-head"><Link className="brand" href="/"><span className="brand-mark">ب</span><span><b>بالمفهوم</b><small>BELMAFHOOM</small></span></Link><div className="form-actions"><Link className="btn btn-light" href="/teachers">المدرسون</Link><Link className="btn btn-primary" href="/dashboard">مساحتي التعليمية</Link></div></header><section className="page-intro"><span className="eyebrow">اتعلم بالمفهوم</span><h1>اكتشف الكورسات</h1><p>ابحث حسب اسم الكورس والمادة والصف، واختار اللي يناسبك.</p></section>
+ <form method="get" className="search-panel"><label><small>اسم الكورس</small><input name="q" defaultValue={q} placeholder="ابحث عن كورس..."/></label><label><small>المادة</small><select name="subject" defaultValue={subject}><option value="">كل المواد</option>{(subjects||[]).map((x:any)=><option key={x.id} value={x.id}>{x.name}</option>)}</select></label><label><small>الصف الدراسي</small><select name="grade" defaultValue={grade}><option value="">كل الصفوف</option>{(grades||[]).map((x:any)=><option key={x.id} value={x.id}>{x.name}</option>)}</select></label><label className="checkbox-field"><input type="checkbox" name="free" value="yes" defaultChecked={free}/> المجاني فقط</label><button className="btn btn-primary">بحث</button><Link className="btn btn-light" href="/courses">مسح</Link></form>
+ {error?<div className="notice error">تعذر تحميل الكورسات حاليًا. حاول مرة تانية.</div>:courses.length?<><p className="muted-copy" style={{marginTop:24}}>عدد النتائج: {courses.length}</p><div className="cards">{courses.map((course,i)=><article className="course-card" key={course.id}><div className={`course-art ${["blue","gold","violet"][i%3]}`}>{course.subjects?.name||"بالمفهوم"}</div><div className="course-info"><span className="tag">{course.grades?.name||"كل الصفوف"}</span><h3>{course.title}</h3><p>{course.description||"تفاصيل الكورس ومحتواه التعليمي."}</p><div className="meta"><b>{course.is_free?"مجاني":Number(course.price).toLocaleString("ar-EG")+" ج.م"}</b><Link href={`/courses/${course.id}`}>التفاصيل ←</Link></div></div></article>)}</div></>:<div className="empty-state"><div className="empty-icon">✦</div><h3>مفيش كورسات مطابقة لبحثك</h3><p>جرّب تغيير الفلاتر أو ارجع اعرض كل الكورسات. المحتوى بيظهر بعد اعتماد المدرس ونشر الكورس.</p><Link className="btn btn-primary" href="/teachers">تعرّف على المدرسين</Link></div>}
+ </main>;
 }
