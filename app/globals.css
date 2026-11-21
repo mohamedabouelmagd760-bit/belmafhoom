@@ -56,3 +56,22 @@ body{font-family:"IBM Plex Sans Arabic",sans-serif;background:#fff;color:var(--i
 
 .hero-search-v3{display:flex;align-items:center;gap:9px;width:min(450px,100%);margin-top:20px;padding:6px 7px 6px 14px;border:1px solid #e0e7f1;background:#fff;border-radius:6px;box-shadow:0 10px 28px #172b4d08}.hero-search-v3>span{font-size:25px;color:#9aa7b8;line-height:1}.hero-search-v3 input{flex:1;min-width:0;border:0;outline:0;background:transparent;padding:9px 2px;font-size:10px;color:#172B4D}.hero-search-v3 button{border:0;border-radius:4px;background:#356CE6;color:#fff;padding:10px 16px;font-size:10px;font-weight:700;cursor:pointer}.hero-search-v3 button b{font-size:15px;margin-right:8px}.mobile-menu{display:none;position:relative}.mobile-menu summary{list-style:none;width:39px;height:39px;border:1px solid #e4eaf3;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer}.mobile-menu summary::-webkit-details-marker{display:none}.mobile-menu summary span{width:17px;height:2px;background:#172B4D;border-radius:2px}.mobile-menu-panel{position:absolute;top:48px;left:0;width:205px;padding:10px;background:#fff;border:1px solid #e5ebf3;box-shadow:0 16px 38px #172b4d1c;border-radius:6px;display:grid;gap:0;z-index:20}.mobile-menu-panel a{padding:12px 10px;font-size:11px;color:#53627a;border-bottom:1px solid #f0f2f6}.mobile-menu-panel a:last-child{border:0;color:#356CE6;font-weight:700}
 @media(max-width:700px){.mobile-menu{display:block}.hero-search-v3{margin:15px auto 0;max-width:420px}.hero-search-v3 input{font-size:9px}.hero-search-v3 button{padding:9px 12px;font-size:9px}.hero-v3-points{margin-top:15px}}
+
+/* Homepage logo placement: preserve the complete approved lockup and give it real header space */
+.site-header{height:104px!important}
+.site-header-inner{gap:18px!important}
+.brand-lockup{flex:0 0 auto!important;width:270px!important;min-width:270px!important;justify-content:flex-start!important;overflow:visible!important}
+.brand-lockup img{width:260px!important;height:88px!important;max-width:none!important;object-fit:contain!important;object-position:center!important}
+.main-nav{flex:1 1 auto!important;justify-content:center!important;gap:clamp(12px,1.8vw,25px)!important;white-space:nowrap!important}
+.header-actions{flex:0 0 auto!important}
+@media(max-width:900px){
+ .brand-lockup{width:220px!important;min-width:220px!important}
+ .brand-lockup img{width:215px!important;height:76px!important}
+}
+@media(max-width:700px){
+ .site-header{height:82px!important}
+ .site-header-inner{width:calc(100% - 24px)!important;gap:8px!important}
+ .brand-lockup{width:176px!important;min-width:176px!important}
+ .brand-lockup img{width:174px!important;height:64px!important}
+ .header-actions{gap:7px!important}
+}
