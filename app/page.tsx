@@ -20,7 +20,7 @@ export default async function Home() {
   return <>
     <header className="topbar wrap">
       <Link className="brand" href="/"><span className="brand-mark">ب</span><span><b>بالمفهوم</b><small>BELMAFHOOM</small></span></Link>
-      <nav><a href="#courses">الكورسات</a><a href="#how">عن المنصة</a></nav>
+      <nav><Link href="/teachers">المدرسون</Link><Link href="/courses">الكورسات</Link><Link href="/about">عن المنصة</Link><Link href="/help">مساعدة</Link></nav>
       <div className="top-actions"><Link className="btn btn-ghost" href="/login">تسجيل الدخول</Link><Link className="btn btn-primary" href="/signup">ابدأ الآن</Link></div>
     </header>
     <main>
