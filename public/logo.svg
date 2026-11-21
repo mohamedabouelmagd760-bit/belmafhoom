@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 190">
+<defs><linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4F83FF"/><stop offset="1" stop-color="#2460D9"/></linearGradient></defs>
+<g fill="#172B4D" font-family="Alexandria,'Arial',sans-serif" font-weight="800">
+<text x="410" y="83" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-size="82">بالمفهوم</text>
+</g>
+<g transform="translate(407 7) scale(.56)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M0 10V-20M-35 20l-22-26M35 20L57-6" stroke="#F3B84B" stroke-width="17"/>
+<path d="M0 35c-15-25-48-26-65-5-23 0-38 19-34 39-19 16-18 45 2 59-6 25 14 46 38 44 13 19 39 22 59 7V35Z" stroke="#356CE6" stroke-width="14" fill="#fff"/>
+<path d="M0 35c15-25 48-26 65-5 23 0 38 19 34 39 19 16 18 45-2 59 6 25-14 46-38 44-13 19-39 22-59 7V35Z" stroke="url(#blue)" stroke-width="14" fill="#356CE6"/>
+<path d="M0 35v144M-48 55c-13 9-14 26-2 35m-22 13c15-1 24 11 23 24m35-65c-14 2-21 13-18 25m-14 31c12 0 20 9 19 20m75-83c13 9 14 26 2 35m22 13c-15-1-24 11-23 24m-35-65c14 2 21 13 18 25m14 31c-12 0-20 9-19 20" stroke="#fff" stroke-width="10"/>
+<path d="M-37 191h74l-8 22h-58z" fill="#fff" stroke="#fff" stroke-width="7"/><path d="M-25 230h50" stroke="#F3B84B" stroke-width="12"/>
+</g>
+<path d="M176 113H285M535 113H644" stroke="#172B4D" stroke-width="3"/>
+<text x="410" y="141" text-anchor="middle" fill="#172B4D" font-family="Manrope,Arial,sans-serif" font-size="26" font-weight="700" letter-spacing="11">BELMAFHOOM</text>
+<text x="410" y="177" text-anchor="middle" fill="#172B4D" font-family="Alexandria,Arial,sans-serif" font-size="23" font-weight="700">مش مجرد شرح.. فهم حقيقي.</text>
+<path d="M302 184Q410 165 518 184" stroke="#F3B84B" stroke-width="6" fill="none" stroke-linecap="round"/>
+</svg>
